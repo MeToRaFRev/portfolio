@@ -1,125 +1,193 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, useAnimation } from "framer-motion";
 import Box from "@mui/material/Box";
 import { IconButton, Typography } from "@mui/material";
 import { ArrowDown } from "lucide-react";
-import ThemeSwitch from "./ThemeSwitch";
 import { ReactComponent as Linkedin } from "../assets/icons/linkedin.svg";
 import { ReactComponent as Github } from "../assets/icons/github.svg";
+import useCustomSmoothScroll from "../hooks/useCustomSmoothScroll"; // adjust path as needed
 
 // Create motion-enabled versions of MUI components
 const MotionBox = motion.create(Box);
 
-export default function HeroSection(props) {
-    const { theme, setTheme } = props;
-    return (
-        <MotionBox
-            component="section"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            sx={{
-                minHeight: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                position: "relative",
-                // background: "linear-gradient(to bottom, #fff, #f9fafb)",
-                px: 2, // roughly 16px horizontal padding
-            }}
+// Easing function for programmatic scroll
+const easeInOutQuad = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
+
+const scrollToPosition = (target, duration) => {
+  return new Promise((resolve) => {
+    const start = window.pageYOffset;
+    const distance = target - start;
+    let startTime = null;
+
+    const animation = (currentTime) => {
+      if (!startTime) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+      const ease = easeInOutQuad(progress);
+      window.scrollTo(0, start + distance * ease);
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      } else {
+        resolve();
+      }
+    };
+
+    requestAnimationFrame(animation);
+  });
+};
+
+export default function HeroSection() {
+  const arrowControls = useAnimation();
+  const [arrowExpanded, setArrowExpanded] = useState(false);
+  const { disableCustomScroll, enableCustomScroll } = useCustomSmoothScroll();
+
+  useEffect(() => {
+    if (!arrowExpanded) {
+      arrowControls.start({
+        y: [0, 10, 0],
+        transition: { repeat: Infinity, duration: 2 },
+      });
+    }
+  }, [arrowControls, arrowExpanded]);
+
+  const handleArrowClick = async () => {
+    // Disable custom scroll while we perform our animation
+    disableCustomScroll();
+    arrowControls.stop();
+
+    if (!arrowExpanded) {
+      // First click: animate arrow down and rotate it
+      await arrowControls.start({
+        y: "44vh", // adjust as needed
+        rotate: 180,
+        transition: { duration: 1 },
+      });
+      // Programmatically scroll down (adjust target as needed)
+      await scrollToPosition(window.innerHeight, 1000);
+      setArrowExpanded(true);
+    } else {
+      // Second click: shiver then shoot up
+      await arrowControls.start({
+        x: [0, -5, 5, -5, 5, 0],
+        transition: { duration: 0.5 },
+      });
+      await arrowControls.start({
+        y: 0,
+        rotate: 0,
+        transition: { duration: 0.5 },
+      });
+      // Programmatically scroll up back to top (or desired position)
+      await scrollToPosition(0, 1000);
+      setArrowExpanded(false);
+      // Resume idle bouncing
+      arrowControls.start({
+        y: [0, 10, 0],
+        transition: { repeat: Infinity, duration: 2 },
+      });
+    }
+    // Re-enable custom scroll and update its target position
+    enableCustomScroll();
+  };
+
+  return (
+    <MotionBox
+      component="section"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "relative",
+        px: 2,
+      }}
+    >
+      <MotionBox
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        sx={{ textAlign: "center", maxWidth: "768px" }}
+      >
+        <Typography
+          component="h1"
+          sx={{
+            fontSize: { xs: "2.25rem", md: "3.75rem" },
+            fontWeight: "bold",
+            color: "text.primary",
+            mb: 3,
+          }}
         >
-            <MotionBox
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                sx={{
-                    textAlign: "center",
-                    maxWidth: "768px",
-                }}
-            >
-                <Typography
-                    component="h1"
-                    sx={{
-                        fontSize: { xs: "2.25rem", md: "3.75rem" },
-                        fontWeight: "bold",
-                        color: "text.primary",
-                        mb: 3,
-                    }}
-                >
-                    Hello, I'm Aviel Levy
-                </Typography>
-                <ThemeSwitch theme={theme} setTheme={setTheme} />
-                <Typography
-                    component="p"
-                    sx={{
-                        fontSize: { xs: "1.25rem", md: "1.5rem" },
-                        color: "text.secondary",
-                        mb: 4,
-                    }}
-                >
-                    Full Stack Developer crafting elegant digital experiences
-                </Typography>
-                <MotionBox
-                    component="p"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    sx={{
-                        fontSize: "1rem",
-                        color: "text.secondary",
-                        display: "flex",
-                        justifyContent: "center",
-                    }}
-                >
-                    <IconButton
-                        variant="outlined"
-                        size="large"
-                        sx={{ display: "flex", alignItems: "center", gap: 1, textTransform: "none" }}
-                        onClick={() => window.open("https://linkedin.com/in/aviel-levi", "_blank")}
-                    >
-                        <Linkedin style={{ width: 20, height: 20 }} />
-                    </IconButton>
-                    <IconButton
-                        variant="outlined"
-                        size="large"
-                        sx={{ display: "flex", alignItems: "center", gap: 1, textTransform: "none" }}
-                        onClick={() => window.open("https://github.com/MeToRaFRev", "_blank")}
-                    >
-                        <Github style={{ width: 20, height: 20 }} />
-                    </IconButton>
-                </MotionBox>
-            </MotionBox>
-
-            <MotionBox
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.5 }}
-                sx={{
-                    position: "absolute",
-                    bottom: "48px", // Tailwind bottom-12 equals roughly 48px
-                }}
-            >
-                <MotionBox
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                >
-                    <ArrowDown width={24} height={24} color="#9CA3AF" />
-                </MotionBox>
-            </MotionBox>
-
-            <MotionBox
-                sx={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0,
-                    pointerEvents: "none",
-                    background:
-                        `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.144) 0%, rgba(160, 140, 25, 0.1) 100%)`,
-                }}
-            />
+          Hello, I'm Aviel Levy
+        </Typography>
+        <Typography
+          component="p"
+          sx={{
+            fontSize: { xs: "1.25rem", md: "1.5rem" },
+            color: "text.secondary",
+            mb: 4,
+          }}
+        >
+          Full Stack Developer crafting elegant digital experiences
+        </Typography>
+        <MotionBox
+          component="p"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          sx={{
+            fontSize: "1rem",
+            color: "text.secondary",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <IconButton
+            variant="outlined"
+            size="large"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              textTransform: "none",
+            }}
+            onClick={() =>
+              window.open("https://linkedin.com/in/aviel-levi", "_blank")
+            }
+          >
+            <Linkedin style={{ width: 20, height: 20 }} />
+          </IconButton>
+          <IconButton
+            variant="outlined"
+            size="large"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              textTransform: "none",
+            }}
+            onClick={() =>
+              window.open("https://github.com/MeToRaFRev", "_blank")
+            }
+          >
+            <Github style={{ width: 20, height: 20 }} />
+          </IconButton>
         </MotionBox>
-    );
+      </MotionBox>
+
+      <MotionBox
+        sx={{
+          position: "absolute",
+          bottom: "40vh",
+          cursor: "pointer",
+        }}
+        animate={arrowControls}
+        onClick={handleArrowClick}
+      >
+        <ArrowDown width={24} height={24} color="#9CA3AF" />
+      </MotionBox>
+    </MotionBox>
+  );
 }

@@ -1,70 +1,33 @@
+// src/themes/darkTheme.js
 import { createTheme } from '@mui/material';
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
-    custom: {
-      titleIcon: '#2dd4bf',
-      bright: '#9333ea',
-      light: '#3f3f46',
-      dark: '#d7cde0',
-      editor: '#1e1e1e',
-    },
     primary: {
-      main: '#7f56da',
+      main: '#72e97d',          // Slightly lighter violet for visibility
       contrastText: '#ffffff',
     },
     background: {
-      default: '#191919',
-      paper: '#2c2c2c',
+      default: '#121212',       // Deep dark grey for true dark mode feel
+      paper: '#1f1f1f',         // Slightly lighter grey for card backgrounds
     },
     text: {
-      primary: '#f3f4f6',
-      secondary: '#9ca3af',
+      primary: '#f9fafb',       // Near-white for excellent readability
+      secondary: '#9ca3af',     // Soft grey to reduce strain
     },
   },
   typography: {
     fontFamily: [
       'ui-sans-serif',
       'system-ui',
-      'sans-serif',
+      'Inter',                  // Same modern font for consistency
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
       '"Noto Color Emoji"',
-      '"Android Emoji"',
-      '"EmojiSymbols"',
     ].join(','),
     fontSize: 16,
-  },
-  components: {
-    MuiAppBar: {
-      defaultProps: {
-        color: 'inherit',
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        containedPrimary: {
-          backgroundColor: '#7f56da',
-          color: '#fff',
-          '&:hover': {
-            backgroundColor: '#6f44c9',
-          },
-          '&:disabled': {
-            backgroundColor: '#4b5563',
-          },
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-        },
-      },
-    },
   },
 });
 

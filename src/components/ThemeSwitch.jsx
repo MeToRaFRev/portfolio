@@ -54,7 +54,7 @@ function ThemeSwitch({ theme, setTheme }) {
   }, [theme.palette.mode, changeTheme]);
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'fixed', top: 16, right: 16, zIndex: 1300 }}>
       <IconButton disableRipple onClick={handleClick}>
         {theme.palette.mode === 'dark' ? (
           <Sun style={{ color: '#FFD242' }} />

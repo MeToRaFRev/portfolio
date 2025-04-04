@@ -5,11 +5,13 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Mail } from "lucide-react";
+import { useTheme } from "@mui/material/styles";
 
 // Create a motion-enabled Box for convenience
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 export default function ContactSection() {
+    const theme = useTheme();
     return (
         <Box
             component="section"
@@ -18,8 +20,22 @@ export default function ContactSection() {
                 py: 10, // roughly 80px vertical padding
                 px: 2,  // roughly 16px horizontal padding
                 // backgroundColor: "white",
+                backdropFilter: "blur(10px)",
+                "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "2px", // Adjust fade height
+                    background: "linear-gradient(to right, transparent, #bebebe9f, transparent)",
+                    zIndex: 1,
+                    pointerEvents: "none",
+                },
             }}
         >
+
+
             <Container maxWidth="md" sx={{ textAlign: "center" }}>
                 <MotionBox
                     initial={{ opacity: 0, y: 20 }}
@@ -60,7 +76,7 @@ export default function ContactSection() {
                             <Button
                                 variant="outlined"
                                 size="large"
-                                sx={{ display: "flex", alignItems: "center", gap: 1,textTransform:"none" }}
+                                sx={{ display: "flex", alignItems: "center", gap: 1, textTransform: "none" }}
                                 onClick={() => (window.location.href = "mailto:avielz.levy@gmail.com")}
                             >
                                 <Mail size={20} />

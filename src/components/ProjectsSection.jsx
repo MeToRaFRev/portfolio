@@ -120,18 +120,32 @@ export default function ProjectsSection() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
+                    style={{ display: "flex", justifyContent: "center" }}
                 >
-                    <Typography
-                        variant="h3"
-                        component="h2"
-                        sx={{
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            mb: 8, // roughly equals Tailwind mb-16 (64px)
-                        }}
-                    >
-                        Featured Projects
-                    </Typography>
+                    <Box 
+                    sx={{
+                        backdropFilter: "blur(10px)",
+                        display: "flex",
+                        justifyContent: "center",
+                        width: "45%",
+                        height: "5vh",
+                        marginBottom: "2rem",
+                        borderRadius: "10px",
+
+                        // backgroundColor: "rgba(255, 255, 255, 0.01)",
+                    }}>
+                        <Typography
+                            variant="h3"
+                            component="h2"
+                            sx={{
+                                textAlign: "center",
+                                fontWeight: "bold",
+                                mb: 8, // roughly equals Tailwind mb-16 (64px)
+                            }}
+                        >
+                            Featured Projects
+                        </Typography>
+                    </Box>
                 </motion.div>
 
                 {isLoading ? (
