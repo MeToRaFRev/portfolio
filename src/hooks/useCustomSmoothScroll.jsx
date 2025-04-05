@@ -58,4 +58,31 @@ function useCustomSmoothScroll() {
   return { disableCustomScroll, enableCustomScroll };
 }
 
+
+// Easing function for programmatic scroll
+const easeInOutQuad = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
+
+export const scrollToPosition = (target, duration) => {
+  return new Promise((resolve) => {
+    const start = window.pageYOffset;
+    const distance = target - start;
+    let startTime = null;
+
+    const animation = (currentTime) => {
+      if (!startTime) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+      const ease = easeInOutQuad(progress);
+      window.scrollTo(0, start + distance * ease);
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      } else {
+        resolve();
+      }
+    };
+
+    requestAnimationFrame(animation);
+  });
+};
+
 export default useCustomSmoothScroll;

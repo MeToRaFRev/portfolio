@@ -10,36 +10,10 @@ import useCustomSmoothScroll from "../hooks/useCustomSmoothScroll"; // adjust pa
 // Create motion-enabled versions of MUI components
 const MotionBox = motion.create(Box);
 
-// Easing function for programmatic scroll
-const easeInOutQuad = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
-
-const scrollToPosition = (target, duration) => {
-  return new Promise((resolve) => {
-    const start = window.pageYOffset;
-    const distance = target - start;
-    let startTime = null;
-
-    const animation = (currentTime) => {
-      if (!startTime) startTime = currentTime;
-      const timeElapsed = currentTime - startTime;
-      const progress = Math.min(timeElapsed / duration, 1);
-      const ease = easeInOutQuad(progress);
-      window.scrollTo(0, start + distance * ease);
-      if (timeElapsed < duration) {
-        requestAnimationFrame(animation);
-      } else {
-        resolve();
-      }
-    };
-
-    requestAnimationFrame(animation);
-  });
-};
-
 export default function HeroSection() {
   const arrowControls = useAnimation();
   const [arrowExpanded, setArrowExpanded] = useState(false);
-  const { disableCustomScroll, enableCustomScroll } = useCustomSmoothScroll();
+  const { disableCustomScroll, enableCustomScroll,scrollToPosition } = useCustomSmoothScroll();
 
   useEffect(() => {
     if (!arrowExpanded) {
@@ -62,7 +36,7 @@ export default function HeroSection() {
         transition: { duration: 1 },
       });
       // Programmatically scroll down (adjust target as needed)
-      await scrollToPosition(window.innerHeight, 1000);
+      await scrollToPosition(window.innerHeight-75, 1000);
       await arrowControls.start({
         rotate: 180,
         transition: { duration: 0.5 },

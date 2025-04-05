@@ -101,7 +101,7 @@ export default function ProjectCard({ project }) {
 
                         <Box sx={{ display: "flex", gap: 2 }}>
                             <Button
-                                variant="outlined"
+                                variant="text"
 
                                 sx={{
                                     display: "flex", alignItems: "center", gap: 1,
@@ -115,7 +115,7 @@ export default function ProjectCard({ project }) {
                             </Button>
                             {project.github_url && (
                                 <Button
-                                    variant="outlined"
+                                    variant="text"
                                     sx={{
                                         display: "flex", alignItems: "center", gap: 1,
                                         // borderColor:"#2e2e2e57",color:"#000000", "&:hover": { backgroundColor: "#2e2e2e18"},

@@ -10,6 +10,7 @@ import lightTheme from "./themes/lightTheme";
 import { CssBaseline } from "@mui/material";
 import ParticleBackground from "./components/ParticleBackground";
 import ThemeSwitch from "./components/ThemeSwitch";
+import Navbar from "./components/Navbar";
 import useCustomSmoothScroll from "./hooks/useCustomSmoothScroll";
 export default function App() {
   const [theme, setTheme] = useState(() => {
@@ -22,14 +23,15 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {<Box sx={{ position: "relative", minHeight: "100vh" }}>
-        <ParticleBackground />
-        <ThemeSwitch theme={theme} setTheme={setTheme} />
-        <HeroSection/>
-        /<SkillsSection />
-        <ProjectsSection />
-        <ContactSection />
-      </Box>}
+      <Navbar theme={theme} setTheme={setTheme}/>
+        <Box sx={{ position: "relative", minHeight: "100vh" }}>
+          <ParticleBackground />
+          <HeroSection />
+          <SkillsSection />
+          <ProjectsSection />
+          <ContactSection />
+        </Box>
+
     </ThemeProvider>
   );
 }
