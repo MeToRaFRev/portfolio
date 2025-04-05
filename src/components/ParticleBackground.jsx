@@ -3,7 +3,6 @@ import React, { useCallback, useEffect } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadFull } from "tsparticles";
 import { useTheme, darken } from "@mui/material/styles";
-import { distance } from "framer-motion";
 
 export default function ParticleBackground() {
   const theme = useTheme();
@@ -21,7 +20,6 @@ export default function ParticleBackground() {
 
   const particlesLoaded = useCallback(async (container) => {
     console.log("Particles loaded", container);
-    console.log(theme)
   }, []);
 
   return (

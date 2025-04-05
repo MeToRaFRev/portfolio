@@ -59,11 +59,14 @@ export default function HeroSection() {
       // First click: animate arrow down and rotate it
       await arrowControls.start({
         y: "44vh", // adjust as needed
-        rotate: 180,
         transition: { duration: 1 },
       });
       // Programmatically scroll down (adjust target as needed)
       await scrollToPosition(window.innerHeight, 1000);
+      await arrowControls.start({
+        rotate: 180,
+        transition: { duration: 0.5 },
+      });
       setArrowExpanded(true);
     } else {
       // Second click: shiver then shoot up

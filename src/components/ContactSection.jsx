@@ -5,13 +5,10 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Mail } from "lucide-react";
-import { useTheme } from "@mui/material/styles";
-
 // Create a motion-enabled Box for convenience
 const MotionBox = motion.create(Box);
 
 export default function ContactSection() {
-    const theme = useTheme();
     return (
         <Box
             component="section"
