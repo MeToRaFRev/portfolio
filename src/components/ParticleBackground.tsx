@@ -1,24 +1,18 @@
-// ParticleBackground.js
 import React, { useCallback, useEffect } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadFull } from "tsparticles";
-import { useTheme, darken } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
+import type { Container } from "@tsparticles/engine";
 
 export default function ParticleBackground() {
   const theme = useTheme();
-
-  const strokeColor =
-    theme.palette.mode === "light"
-      ? darken(theme.palette.primary.main, 0.3)
-      : theme.palette.primary.main;
-
   useEffect(() => {
     initParticlesEngine(async (engine) => {
       await loadFull(engine);
-    })
+    });
   }, []);
 
-  const particlesLoaded = useCallback(async (container) => {
+  const particlesLoaded = useCallback(async (container?: Container) => {
     console.log("Particles loaded", container);
   }, []);
 
@@ -35,13 +29,21 @@ export default function ParticleBackground() {
         fpsLimit: 60,
         interactivity: {
           events: {
-            onClick: { enable: true, mode: "attract" },
-            onHover: { enable: true, mode: "repulse" },
-            resize: true,
+            onClick: { enable: true, mode: "repulse" },
+            onHover: { enable: true, mode: ["bubble", "grab"] },
+            resize: { enable: true },
           },
           modes: {
-            attract: { distance: 800, duration: 2,speed: 4 },
-            repulse: { distance: 100, duration: 0.4 },
+            push: { quantity: 4 },
+            repulse: { distance: 300, duration: 0.1,speed:6 },
+            attract: { distance: 800, duration: 0.4, speed: 4 },
+            grab: { distance: 300, links: { opacity: 0.5, blink: true } },
+            bubble: {
+              distance: 400,
+              size: 5,
+              duration: 2,
+              opacity: 10,
+            },
           },
         },
         particles: {
@@ -54,25 +56,23 @@ export default function ParticleBackground() {
             color: theme.palette.primary.main,
           },
           shape: {
-            type: "circle", stroke: {
-              width: 1,
-              color: strokeColor,
-            },
+            type: "circle",
           },
           number: {
             value: 50,
             density: {
               enable: true,
-              area: 800,
+              width: 800,
+              height: 600,
             },
           },
           move: {
             enable: true,
-            speed: 0.3, // slow movement
+            speed: 0.3,
             direction: "none",
             random: true,
             straight: false,
-            out_mode: "out",
+            outModes: "out",
           },
           detectRetina: true,
         },

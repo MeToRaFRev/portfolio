@@ -13,7 +13,8 @@ const MotionBox = motion.create(Box);
 export default function HeroSection() {
   const arrowControls = useAnimation();
   const [arrowExpanded, setArrowExpanded] = useState(false);
-  const { disableCustomScroll, enableCustomScroll,scrollToPosition } = useCustomSmoothScroll();
+  const { disableCustomScroll, enableCustomScroll, scrollToPosition } =
+    useCustomSmoothScroll();
 
   useEffect(() => {
     if (!arrowExpanded) {
@@ -28,7 +29,7 @@ export default function HeroSection() {
     // Disable custom scroll while we perform our animation
     disableCustomScroll();
     arrowControls.stop();
-
+  
     if (!arrowExpanded) {
       // First click: animate arrow down and rotate it
       await arrowControls.start({
@@ -36,7 +37,7 @@ export default function HeroSection() {
         transition: { duration: 1 },
       });
       // Programmatically scroll down (adjust target as needed)
-      await scrollToPosition(window.innerHeight-75, 1000);
+      await scrollToPosition(window.innerHeight - 75, 1000);
       await arrowControls.start({
         rotate: 180,
         transition: { duration: 0.5 },
@@ -62,13 +63,15 @@ export default function HeroSection() {
         transition: { repeat: Infinity, duration: 2 },
       });
     }
-    // Re-enable custom scroll and update its target position
-    enableCustomScroll();
+    // Delay re-enabling the custom scroll to let the scroll settle
+    setTimeout(() => {
+      enableCustomScroll(0);
+    }, 100); // 100ms delay; adjust as needed
   };
+  
 
   return (
     <MotionBox
-      component="section"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
@@ -110,7 +113,6 @@ export default function HeroSection() {
           Full Stack Developer crafting elegant digital experiences
         </Typography>
         <MotionBox
-          component="p"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
@@ -122,7 +124,6 @@ export default function HeroSection() {
           }}
         >
           <IconButton
-            variant="outlined"
             size="large"
             sx={{
               display: "flex",
@@ -137,7 +138,6 @@ export default function HeroSection() {
             <Linkedin style={{ width: 20, height: 20 }} />
           </IconButton>
           <IconButton
-            variant="outlined"
             size="large"
             sx={{
               display: "flex",

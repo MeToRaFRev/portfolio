@@ -9,7 +9,6 @@ import darkTheme from "./themes/darkTheme";
 import lightTheme from "./themes/lightTheme";
 import { CssBaseline } from "@mui/material";
 import ParticleBackground from "./components/ParticleBackground";
-import ThemeSwitch from "./components/ThemeSwitch";
 import Navbar from "./components/Navbar";
 import useCustomSmoothScroll from "./hooks/useCustomSmoothScroll";
 export default function App() {
@@ -19,19 +18,17 @@ export default function App() {
   });
   useCustomSmoothScroll();
 
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Navbar theme={theme} setTheme={setTheme}/>
-        <Box sx={{ position: "relative", minHeight: "100vh" }}>
-          <ParticleBackground />
-          <HeroSection />
-          <SkillsSection />
-          <ProjectsSection />
-          <ContactSection />
-        </Box>
-
+      <Navbar theme={theme} setTheme={setTheme} />
+      <Box sx={{ position: "relative", minHeight: "100vh" }}>
+        <ParticleBackground />
+        <HeroSection />
+        <SkillsSection />
+        <ProjectsSection />
+        <ContactSection />
+      </Box>
     </ThemeProvider>
   );
 }

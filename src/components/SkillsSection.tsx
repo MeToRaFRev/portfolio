@@ -1,13 +1,19 @@
-import React from "react";
-import {motion } from "framer-motion";
+import React, { JSX } from "react";
+import { motion } from "framer-motion";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
-import Fade from "@mui/material/Fade"
+import Fade from "@mui/material/Fade";
 
-const skills = [
+interface Skill {
+  name: string;
+  icon: string;
+  description: string;
+}
+
+const skills: Skill[] = [
   {
     name: "React",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
@@ -130,9 +136,13 @@ const skills = [
   },
 ];
 
+interface SkillIconProps {
+  skill: Skill;
+  index: number;
+}
 
-function SkillIcon({ skill, index }) {
-  const [tooltipOpen, setTooltipOpen] = React.useState(false);
+function SkillIcon({ skill, index }: SkillIconProps): JSX.Element {
+  const [tooltipOpen, setTooltipOpen] = React.useState<boolean>(false);
 
   const handleIconHover = () => {
     setTooltipOpen((prev) => !prev);
@@ -166,13 +176,13 @@ function SkillIcon({ skill, index }) {
             backgroundColor: "rgba(255, 255, 255, 0.027)",
             p: 2,
             maxWidth: 200,
-          }
+          },
         },
         arrow: {
           sx: {
             backgroundColor: "rgba(255, 255, 255, 0.027)",
-          }
-        }
+          },
+        },
       }}
       // arrow
       placement="bottom"
@@ -203,7 +213,8 @@ function SkillIcon({ skill, index }) {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
-          }}>
+          }}
+        >
           <Box sx={{ width: 64, height: 64, mb: 2 }}>
             <img
               src={skill.icon}
@@ -263,7 +274,7 @@ export default function SkillsSection() {
           </motion.div>
           <Grid container spacing={4} justifyContent="center">
             {skills.map((skill, index) => (
-              <Grid key={skill.name} item>
+              <Grid key={skill.name}>
                 <SkillIcon skill={skill} index={index} />
               </Grid>
             ))}
