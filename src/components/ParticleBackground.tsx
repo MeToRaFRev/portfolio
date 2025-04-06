@@ -37,7 +37,7 @@ export default function ParticleBackground() {
           modes: {
             push: { quantity: 4 },
             // Increase duration for a sustained repulse force
-            repulse: { distance: 300, duration: 1, speed: 6 },
+            repulse: { distance: 300, duration: 10, speed: 6 },
             attract: { distance: 800, duration: 0.4, speed: 4 },
             grab: { distance: 300, links: { opacity: 0.5, blink: true } },
             bubble: {

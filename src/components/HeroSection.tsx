@@ -6,6 +6,7 @@ import { ArrowDown } from "lucide-react";
 import { ReactComponent as Linkedin } from "../assets/icons/linkedin.svg";
 import { ReactComponent as Github } from "../assets/icons/github.svg";
 import scroll from "../utils/scroll";
+import avielImage from "../assets/images/aviel.png";
 
 // Create motion-enabled versions of MUI components
 const MotionBox = motion.create(Box);
@@ -20,38 +21,43 @@ export default function HeroSection() {
         transition: {
           type: "spring",
           stiffness: 100, // Increase for a snappier bounce
-          damping: 10,    // Increase for a softer bounce
+          damping: 10, // Increase for a softer bounce
           repeat: Infinity,
           repeatType: "mirror",
         },
       });
     }
   }, [arrowControls, arrowExpanded]);
-  
 
   const handleArrowClick = async () => {
     // Disable custom scroll while we perform our animation
     arrowControls.stop();
-  
+
     if (!arrowExpanded) {
       // First click: animate arrow down and rotate it
+      setTimeout(async () => {
+        await scroll(window.innerHeight - 75, 1000);
+      }
+      , 600); // Adjust the delay as needed
+
       await arrowControls.start({
         y: "35vh", // adjust as needed
         transition: { duration: 1 },
       });
       // Programmatically scroll down (adjust target as needed)
-      await scroll(window.innerHeight - 75, 1000);
       await arrowControls.start({
         rotate: 180,
         transition: { duration: 0.5 },
       });
       setArrowExpanded(true);
     } else {
-      // Second click: shiver then shoot up
       await arrowControls.start({
         x: [0, -5, 5, -5, 5, 0],
         transition: { duration: 0.5 },
       });
+      setTimeout(async () => {
+        await scroll(0, 1000);
+      }, 100); // Adjust the delay as needed
       await arrowControls.start({
         y: 0,
         transition: { duration: 0.5 },
@@ -62,7 +68,6 @@ export default function HeroSection() {
       });
 
       // Programmatically scroll up back to top (or desired position)
-      await scroll(0, 1000);
       setArrowExpanded(false);
       // Resume idle bouncing
       arrowControls.start({
@@ -71,7 +76,6 @@ export default function HeroSection() {
       });
     }
   };
-  
 
   return (
     <MotionBox
@@ -94,6 +98,25 @@ export default function HeroSection() {
         transition={{ delay: 0.2, duration: 0.5 }}
         sx={{ textAlign: "center", maxWidth: "768px" }}
       >
+        {/* Avatar Image */}
+        <Box
+          component="img"
+          src={avielImage}
+          alt="Aviel Levy"
+          sx={{
+            display: "block",
+            margin: "0 auto",
+            width: { xs: "150px", md: "200px" },
+            backgroundColor: "transparent !important",
+            backdropFilter: "none",
+          }}
+        />
+        <Box sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+        }}>
         <Typography
           component="h1"
           sx={{
@@ -103,8 +126,22 @@ export default function HeroSection() {
             mb: 3,
           }}
         >
-          Hello, I'm Aviel Levy
+          Hello, I'm
         </Typography>
+        <Typography
+          component="h1"
+          sx={{
+            fontSize: { xs: "2.25rem", md: "3.75rem" },
+            fontWeight: "bold",
+            color: "primary.main",
+            // stroke: "white",
+            // strokeWidth: 1,
+            mb: 3,
+          }}
+        >
+          Aviel Levy
+        </Typography>
+        </Box>
         <Typography
           component="p"
           sx={{
@@ -160,7 +197,7 @@ export default function HeroSection() {
       <MotionBox
         sx={{
           position: "absolute",
-          bottom: {lg:"30vh"},
+          bottom: { lg: "30vh" },
           cursor: "pointer",
         }}
         animate={arrowControls}

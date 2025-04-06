@@ -12,8 +12,16 @@ import ParticleBackground from "./components/ParticleBackground";
 import Navbar from "./components/Navbar";
 export default function App() {
   const [theme, setTheme] = useState(() => {
-    const darkMode = localStorage.getItem("darkMode");
-    return darkMode === "true" ? darkTheme : lightTheme;
+    const savedPreference = localStorage.getItem("darkMode");
+  
+    // If user has a saved preference
+    if (savedPreference !== null) {
+      return savedPreference === "true" ? darkTheme : lightTheme;
+    }
+  
+    // Fallback to system preference
+    const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return prefersDarkMode ? darkTheme : lightTheme;
   });
 
   return (
