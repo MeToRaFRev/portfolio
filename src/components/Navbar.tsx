@@ -9,13 +9,12 @@ import {
 } from "@mui/material";
 import ThemeSwitch from "./ThemeSwitch";
 import { useTheme } from "@mui/material/styles";
-import useCustomSmoothScroll from "../hooks/useCustomSmoothScroll"; // adjust path as needed
 import { ThemeProps } from "../types/Theme"; // adjust path as needed
+import scroll from "../utils/scroll"; // adjust path as needed
 
 function Navbar(props: ThemeProps): JSX.Element {
   const { theme, setTheme } = props;
   const currentTheme = useTheme();
-  const { scrollToPosition } = useCustomSmoothScroll();
 
   return (
     <AppBar
@@ -61,25 +60,25 @@ function Navbar(props: ThemeProps): JSX.Element {
             sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
           >
             <Button
-              onClick={() => scrollToPosition(0, 1000)}
+              onClick={() => scroll(0, 1000)}
               sx={{ mr: 2, color: currentTheme.palette.text.primary }}
             >
               Home
             </Button>
             <Button
-              onClick={() => scrollToPosition(window.innerHeight - 75, 1000)}
+              onClick={() => scroll(window.innerHeight - 75, 1000)}
               sx={{ mr: 2, color: currentTheme.palette.text.primary }}
             >
               Skills
             </Button>
             <Button
-              onClick={() => scrollToPosition(window.innerHeight + 500, 1000)}
+              onClick={() => scroll(window.innerHeight + 500, 1000)}
               sx={{ mr: 2, color: currentTheme.palette.text.primary }}
             >
               Projects
             </Button>
             <Button
-              onClick={() => scrollToPosition(window.innerHeight + 900, 1000)}
+              onClick={() => scroll(window.innerHeight + 900, 1000)}
               sx={{ mr: 2, color: currentTheme.palette.text.primary }}
             >
               Contact

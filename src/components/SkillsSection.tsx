@@ -1,11 +1,12 @@
-import React, { JSX } from "react";
-import { motion } from "framer-motion";
+import React, { JSX, useCallback, useEffect } from "react";
+import { motion, useAnimation } from "framer-motion";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
+import { useTheme } from "@mui/material/styles";
 
 interface Skill {
   name: string;
@@ -143,15 +144,26 @@ interface SkillIconProps {
 
 function SkillIcon({ skill, index }: SkillIconProps): JSX.Element {
   const [tooltipOpen, setTooltipOpen] = React.useState<boolean>(false);
+  const theme = useTheme();
+  const controls = useAnimation();
 
-  const handleIconHover = () => {
+  const handleIconHover = useCallback(() => {
     setTooltipOpen((prev) => !prev);
-  };
+  }, [setTooltipOpen]);
+
+  useEffect(() => {
+    // Initial mount animation with staggered delay
+    controls.start({
+      opacity: 1,
+      y: 0,
+      transition: { delay: index * 0.1, duration: 0.4 },
+    });
+  }, [controls, index]);
 
   return (
     <Tooltip
       title={
-        <Typography variant="body2" color="inherit">
+        <Typography variant="body2" color={theme.palette.text.primary}>
           {skill.description}
         </Typography>
       }
@@ -184,18 +196,23 @@ function SkillIcon({ skill, index }: SkillIconProps): JSX.Element {
           },
         },
       }}
-      // arrow
       placement="bottom"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: index * 0.1, duration: 0.4 }}
+        animate={controls}
         whileHover={{
           y: -10,
           scale: 1.1,
           transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+        }}
+        // Reset hover animation immediately with no extra delay
+        onHoverEnd={() => {
+          controls.start({
+            y: 0,
+            scale: 1,
+            transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] },
+          });
         }}
         style={{
           display: "flex",

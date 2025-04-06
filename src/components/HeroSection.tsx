@@ -5,7 +5,7 @@ import { IconButton, Typography } from "@mui/material";
 import { ArrowDown } from "lucide-react";
 import { ReactComponent as Linkedin } from "../assets/icons/linkedin.svg";
 import { ReactComponent as Github } from "../assets/icons/github.svg";
-import useCustomSmoothScroll from "../hooks/useCustomSmoothScroll"; // adjust path as needed
+import scroll from "../utils/scroll";
 
 // Create motion-enabled versions of MUI components
 const MotionBox = motion.create(Box);
@@ -13,31 +13,34 @@ const MotionBox = motion.create(Box);
 export default function HeroSection() {
   const arrowControls = useAnimation();
   const [arrowExpanded, setArrowExpanded] = useState(false);
-  const { disableCustomScroll, enableCustomScroll, scrollToPosition } =
-    useCustomSmoothScroll();
-
   useEffect(() => {
     if (!arrowExpanded) {
       arrowControls.start({
-        y: [0, 10, 0],
-        transition: { repeat: Infinity, duration: 2 },
+        y: 10,
+        transition: {
+          type: "spring",
+          stiffness: 100, // Increase for a snappier bounce
+          damping: 10,    // Increase for a softer bounce
+          repeat: Infinity,
+          repeatType: "mirror",
+        },
       });
     }
   }, [arrowControls, arrowExpanded]);
+  
 
   const handleArrowClick = async () => {
     // Disable custom scroll while we perform our animation
-    disableCustomScroll();
     arrowControls.stop();
   
     if (!arrowExpanded) {
       // First click: animate arrow down and rotate it
       await arrowControls.start({
-        y: "44vh", // adjust as needed
+        y: "35vh", // adjust as needed
         transition: { duration: 1 },
       });
       // Programmatically scroll down (adjust target as needed)
-      await scrollToPosition(window.innerHeight - 75, 1000);
+      await scroll(window.innerHeight - 75, 1000);
       await arrowControls.start({
         rotate: 180,
         transition: { duration: 0.5 },
@@ -51,11 +54,15 @@ export default function HeroSection() {
       });
       await arrowControls.start({
         y: 0,
+        transition: { duration: 0.5 },
+      });
+      await arrowControls.start({
         rotate: 0,
         transition: { duration: 0.5 },
       });
+
       // Programmatically scroll up back to top (or desired position)
-      await scrollToPosition(0, 1000);
+      await scroll(0, 1000);
       setArrowExpanded(false);
       // Resume idle bouncing
       arrowControls.start({
@@ -63,10 +70,6 @@ export default function HeroSection() {
         transition: { repeat: Infinity, duration: 2 },
       });
     }
-    // Delay re-enabling the custom scroll to let the scroll settle
-    setTimeout(() => {
-      enableCustomScroll(0);
-    }, 100); // 100ms delay; adjust as needed
   };
   
 
@@ -157,7 +160,7 @@ export default function HeroSection() {
       <MotionBox
         sx={{
           position: "absolute",
-          bottom: "40vh",
+          bottom: {lg:"30vh"},
           cursor: "pointer",
         }}
         animate={arrowControls}

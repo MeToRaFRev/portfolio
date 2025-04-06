@@ -10,13 +10,11 @@ import lightTheme from "./themes/lightTheme";
 import { CssBaseline } from "@mui/material";
 import ParticleBackground from "./components/ParticleBackground";
 import Navbar from "./components/Navbar";
-import useCustomSmoothScroll from "./hooks/useCustomSmoothScroll";
 export default function App() {
   const [theme, setTheme] = useState(() => {
     const darkMode = localStorage.getItem("darkMode");
     return darkMode === "true" ? darkTheme : lightTheme;
   });
-  useCustomSmoothScroll();
 
   return (
     <ThemeProvider theme={theme}>
