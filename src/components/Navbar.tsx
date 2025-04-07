@@ -1,4 +1,4 @@
-import React, { JSX } from "react";
+import React, { JSX,memo } from "react";
 import {
   AppBar,
   Toolbar,
@@ -9,12 +9,19 @@ import {
 } from "@mui/material";
 import ThemeSwitch from "./ThemeSwitch";
 import { useTheme } from "@mui/material/styles";
-import { ThemeProps } from "../types/Theme"; // adjust path as needed
-import scroll from "../utils/scroll"; // adjust path as needed
+import { ThemeProps } from "../types/Theme";
+import scroll from "../utils/scroll"; 
 
 function Navbar(props: ThemeProps): JSX.Element {
   const { theme, setTheme } = props;
   const currentTheme = useTheme();
+
+  const navItems = [
+    { label: "Home", scrollTo: 0 },
+    { label: "Skills", scrollTo: window.innerHeight},
+    { label: "Projects", scrollTo: window.innerHeight + 750},
+    { label: "Contact", scrollTo: window.innerHeight + 1600},
+  ];
 
   return (
     <AppBar
@@ -33,7 +40,6 @@ function Navbar(props: ThemeProps): JSX.Element {
           alignItems: "center",
         }}
       >
-        {/* Center section: Title */}
         <Typography
           variant="h6"
           sx={{
@@ -59,37 +65,24 @@ function Navbar(props: ThemeProps): JSX.Element {
           <Box
             sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
           >
-            <Button
-              onClick={() => scroll(0, 1000)}
-              sx={{ mr: 2, color: currentTheme.palette.text.primary }}
-            >
-              Home
-            </Button>
-            <Button
-              onClick={() => scroll(window.innerHeight - 75, 1000)}
-              sx={{ mr: 2, color: currentTheme.palette.text.primary }}
-            >
-              Skills
-            </Button>
-            <Button
-              onClick={() => scroll(window.innerHeight + 500, 1000)}
-              sx={{ mr: 2, color: currentTheme.palette.text.primary }}
-            >
-              Projects
-            </Button>
-            <Button
-              onClick={() => scroll(window.innerHeight + 900, 1000)}
-              sx={{ mr: 2, color: currentTheme.palette.text.primary }}
-            >
-              Contact
-            </Button>
+            {navItems.map(({ label, scrollTo }) => (
+              <Button
+                key={label}
+                onClick={() => scroll(scrollTo, 1000)}
+                sx={{ mr: 2, color: currentTheme.palette.text.primary }}
+              >
+                {label}
+              </Button>
+            ))}
           </Box>
-          <Box sx={{
-            display: "flex",
-            flexGrow: 1,
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexGrow: 1,
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
             <ThemeSwitch theme={theme} setTheme={setTheme} />
           </Box>
         </Box>
@@ -98,4 +91,4 @@ function Navbar(props: ThemeProps): JSX.Element {
   );
 }
 
-export default Navbar;
+export default memo(Navbar);;

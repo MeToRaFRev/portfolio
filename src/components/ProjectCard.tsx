@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import { useState, memo, useCallback } from "react";
 import { motion } from "framer-motion";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
+import {
+  Card,
+  CardContent,
+  Button,
+  Box,
+  Typography,
+  Chip,
+} from "@mui/material";
 import { ExternalLink } from "lucide-react";
 import { ReactComponent as Github } from "../assets/icons/github.svg";
 import { Project } from "../types/Project";
@@ -15,8 +17,23 @@ interface ProjectCardProps {
   compact?: boolean;
 }
 
-export default function ProjectCard({ project,compact }: ProjectCardProps) {
+const ProjectCard = ({ project, compact = false }: ProjectCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  const handlePreviewClick = useCallback(() => {
+    window.open(project.preview_url, "_blank");
+  }, [project.preview_url]);
+
+  const handleGithubClick = useCallback(() => {
+    if (project.github_url) {
+      window.open(project.github_url, "_blank");
+    }
+  }, [project.github_url]);
+
+  const techsToDisplay = compact
+    ? project.technologies.slice(0, 2)
+    : project.technologies;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -31,7 +48,6 @@ export default function ProjectCard({ project,compact }: ProjectCardProps) {
           borderRadius: 2,
           backdropFilter: "blur(10px)",
           backgroundColor: "rgba(255, 255, 255, 0.027)",
-          // p: 2,
         }}
       >
         <Card
@@ -40,10 +56,10 @@ export default function ProjectCard({ project,compact }: ProjectCardProps) {
           sx={{
             overflow: "hidden",
             transition: "all 0.3s",
+            backgroundColor: "transparent",
             "&:hover": {
               boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
             },
-            backgroundColor: "transparent",
           }}
         >
           <motion.div
@@ -81,16 +97,18 @@ export default function ProjectCard({ project,compact }: ProjectCardProps) {
             >
               <Button
                 variant="contained"
+                onClick={handlePreviewClick}
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
                   backgroundColor: "#2e2e2e",
-                  color: "#ffffff",
-                  "&:hover": { backgroundColor: "#2e2e2ed8" },
+                  color: "#fff",
                   textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "#2e2e2ed8",
+                  },
                 }}
-                onClick={() => window.open(project.preview_url, "_blank")}
               >
                 <ExternalLink size={16} />
                 View Live
@@ -108,7 +126,11 @@ export default function ProjectCard({ project,compact }: ProjectCardProps) {
             </Typography>
 
             {!compact && (
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mb: 2 }}
+              >
                 {project.description}
               </Typography>
             )}
@@ -121,10 +143,7 @@ export default function ProjectCard({ project,compact }: ProjectCardProps) {
                 mb: compact ? 1 : 2,
               }}
             >
-              {(compact
-                ? project.technologies.slice(0, 2)
-                : project.technologies
-              ).map((tech) => (
+              {techsToDisplay.map((tech) => (
                 <Chip
                   key={tech}
                   label={tech}
@@ -138,11 +157,8 @@ export default function ProjectCard({ project,compact }: ProjectCardProps) {
               <Button
                 variant="text"
                 size={compact ? "small" : "medium"}
-                sx={{
-                  gap: 1,
-                  textTransform: "none",
-                }}
-                onClick={() => window.open(project.preview_url, "_blank")}
+                onClick={handlePreviewClick}
+                sx={{ gap: 1, textTransform: "none" }}
               >
                 <ExternalLink size={14} />
                 Live
@@ -152,11 +168,8 @@ export default function ProjectCard({ project,compact }: ProjectCardProps) {
                 <Button
                   variant="text"
                   size={compact ? "small" : "medium"}
-                  sx={{
-                    gap: 1,
-                    textTransform: "none",
-                  }}
-                  onClick={() => window.open(project.github_url, "_blank")}
+                  onClick={handleGithubClick}
+                  sx={{ gap: 1, textTransform: "none" }}
                 >
                   <Github width={14} height={14} />
                   Code
@@ -168,4 +181,6 @@ export default function ProjectCard({ project,compact }: ProjectCardProps) {
       </Box>
     </motion.div>
   );
-}
+};
+
+export default memo(ProjectCard);

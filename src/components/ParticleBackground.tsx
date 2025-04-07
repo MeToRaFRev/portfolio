@@ -1,16 +1,14 @@
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect,memo } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadFull } from "tsparticles";
 import { useTheme } from "@mui/material/styles";
 import type { Container } from "@tsparticles/engine";
 
-export default function ParticleBackground() {
+function ParticleBackground() {
   const theme = useTheme();
   
   useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadFull(engine);
-    });
+    initParticlesEngine(loadFull)
   }, []);
 
   const particlesLoaded = useCallback(async (container?: Container) => {
@@ -36,7 +34,6 @@ export default function ParticleBackground() {
           },
           modes: {
             push: { quantity: 4 },
-            // Increase duration for a sustained repulse force
             repulse: { distance: 300, duration: 10, speed: 6 },
             attract: { distance: 800, duration: 0.4, speed: 4 },
             grab: { distance: 300, links: { opacity: 0.5, blink: true } },
@@ -91,3 +88,5 @@ export default function ParticleBackground() {
     />
   );
 }
+
+export default memo(ParticleBackground)

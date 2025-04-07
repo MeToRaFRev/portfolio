@@ -1,21 +1,24 @@
-import React from "react";
+import { useMemo, useState,memo } from "react";
 import { motion } from "framer-motion";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Skeleton from "@mui/material/Skeleton";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import {
+  Container,
+  Box,
+  Typography,
+  Grid,
+  Skeleton,
+  useMediaQuery,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ProjectCard from "./ProjectCard";
 import { Project } from "../types/Project";
 
-export default function ProjectsSection() {
-  //   const [projects, setProjects] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+function ProjectsSection() {
+  //   const [projects, setProjects] = useState([]);
+  //setIsLoading
+  const [isLoading] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const projects: Project[] = React.useMemo(() => {
+  const projects: Project[] = useMemo(() => {
     return [
       {
         title: "Clarifield",
@@ -179,3 +182,5 @@ export default function ProjectsSection() {
     </Box>
   );
 }
+
+export default memo(ProjectsSection);

@@ -1,22 +1,21 @@
-import React from "react";
+import {useCallback,memo} from "react";
 import { motion } from "framer-motion";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import {Box,Container,Typography,Button} from "@mui/material";
 import { Mail } from "lucide-react";
-// Create a motion-enabled Box for convenience
+
 const MotionBox = motion.create(Box);
 
-export default function ContactSection() {
+function ContactSection() {
+  const handleEmailClick = useCallback(() => {
+    window.location.href = "mailto:avielz.levy@gmail.com";
+  }, []);
   return (
     <Box
       component="section"
       id="contact"
       sx={{
-        py: 10, // roughly 80px vertical padding
-        px: 2, // roughly 16px horizontal padding
-        // backgroundColor: "white",
+        py: 10,
+        px: 2,
         backdropFilter: "blur(10px)",
         "&::before": {
           content: '""',
@@ -24,7 +23,7 @@ export default function ContactSection() {
           top: 0,
           left: 0,
           right: 0,
-          height: "2px", // Adjust fade height
+          height: "2px",
           background:
             "linear-gradient(to right, transparent, #bebebe9f, transparent)",
           zIndex: 1,
@@ -86,10 +85,7 @@ export default function ContactSection() {
                   gap: 1,
                   textTransform: "none",
                 }}
-                onClick={() =>
-                  (window.location.href = "mailto:avielz.levy@gmail.com")
-                }
-              >
+                onClick={handleEmailClick}>
                 <Mail size={20} />
                 Email Me
               </Button>
@@ -106,3 +102,5 @@ export default function ContactSection() {
     </Box>
   );
 }
+
+export default memo(ContactSection);
