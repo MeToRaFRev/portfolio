@@ -58,6 +58,7 @@ function ContactSection() {
               flexWrap: "wrap",
               justifyContent: "center",
               gap: 2,
+              willChange: 'transform',
             }}
             variants={{
               hidden: { opacity: 0 },

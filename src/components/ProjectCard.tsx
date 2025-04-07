@@ -40,6 +40,9 @@ const ProjectCard = ({ project, compact = false }: ProjectCardProps) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
+      style={{
+        willChange:"tranform"
+      }}
     >
       <Box
         sx={{
@@ -69,6 +72,7 @@ const ProjectCard = ({ project, compact = false }: ProjectCardProps) => {
               position: "relative",
               overflow: "hidden",
               aspectRatio: "16/9",
+              willChange: "transform",
             }}
           >
             <Box

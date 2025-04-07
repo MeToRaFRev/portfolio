@@ -18,6 +18,8 @@ import {
 import { motion, useAnimation } from "framer-motion";
 import { useTheme } from "@mui/material/styles";
 import { RefreshCcw } from "lucide-react";
+import apiConnectIcon from '../assets/icons/apiconnect.png';
+import datapowerIcon from '../assets/icons/datapower.png';
 
 interface Skill {
   name: string;
@@ -54,6 +56,7 @@ function SkillIcon({ skill, index }: SkillIconProps): JSX.Element {
 
   return (
     <Tooltip
+      arrow
       title={
         <Typography variant="body2" color={theme.palette.text.primary}>
           {skill.description}
@@ -63,7 +66,6 @@ function SkillIcon({ skill, index }: SkillIconProps): JSX.Element {
       onClose={() => setTooltipOpen(false)}
       disableFocusListener
       disableHoverListener
-      disableTouchListener
       slots={{
         transition: Fade,
       }}
@@ -84,7 +86,7 @@ function SkillIcon({ skill, index }: SkillIconProps): JSX.Element {
         },
         arrow: {
           sx: {
-            backgroundColor: "rgba(255, 255, 255, 0.027)",
+            color: "rgba(255, 255, 255, 0.253)"
           },
         },
       }}
@@ -178,7 +180,6 @@ function SkillIcon({ skill, index }: SkillIconProps): JSX.Element {
 }
 
 function SkillsSection() {
-
   const skills: Skill[] = useMemo(
     () => [
       // Core Languages
@@ -311,6 +312,16 @@ function SkillsSection() {
         description:
           "A scripting language for automating command line tasks and streamlining workflows in Unix-like environments, enhancing productivity and system management.",
       },
+      {
+        name:"Datapower",
+        icon: datapowerIcon,
+        description:"A multi-function security gateway that provides a range of services including API security, XML and JSON processing, and protocol transformation.",
+      },
+      {
+        "name":"API Connect",
+        icon: apiConnectIcon,
+        description:"An API management solution that enables organizations to create, secure, manage, and socialize APIs across clouds and on-premises environments.",
+      }
     ],
     []
   );
@@ -351,6 +362,9 @@ function SkillsSection() {
           <motion.div
             animate={{ rotate: isRotating ? 360 : 0 }}
             transition={{ duration: 0.6, ease: "easeInOut" }}
+            style={{
+              willChange: "transform",
+            }}
           >
             <IconButton
               size="small"
@@ -372,6 +386,7 @@ function SkillsSection() {
               fontWeight: "bold",
               textAlign: "center",
               marginBottom: "2rem",
+              willChange: "transform",
             }}
           >
             <Typography

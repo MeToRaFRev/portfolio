@@ -88,13 +88,14 @@ function HeroSection() {
         position: "relative",
         overflow: "visible",
         px: 2,
+        willChange: 'transform',
       }}
     >
       <MotionBox
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        sx={{ textAlign: "center", maxWidth: "768px" }}
+        sx={{ textAlign: "center", maxWidth: "768px",willChange: 'transform', }}
       >
         {/* Avatar Image */}
         <Box
@@ -159,6 +160,7 @@ function HeroSection() {
             color: "text.secondary",
             display: "flex",
             justifyContent: "center",
+            willChange: 'transform',
           }}
         >
           <IconButton
