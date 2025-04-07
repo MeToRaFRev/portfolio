@@ -5,13 +5,16 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Skeleton from "@mui/material/Skeleton";
-
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import ProjectCard from "./ProjectCard";
 import { Project } from "../types/Project";
 
 export default function ProjectsSection() {
   //   const [projects, setProjects] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const projects: Project[] = React.useMemo(() => {
     return [
       {
@@ -113,8 +116,7 @@ export default function ProjectsSection() {
               backdropFilter: "blur(10px)",
               display: "flex",
               justifyContent: "center",
-              width: "45%",
-              height: "5vh",
+              // height: "5vh",
               marginBottom: "2rem",
               borderRadius: "10px",
 
@@ -122,12 +124,11 @@ export default function ProjectsSection() {
             }}
           >
             <Typography
-              variant="h3"
-              component="h2"
+              noWrap
               sx={{
+                fontSize: { xs: "2rem", md: "3rem" },
                 textAlign: "center",
                 fontWeight: "bold",
-                mb: 8, // roughly equals Tailwind mb-16 (64px)
               }}
             >
               Featured Projects
@@ -143,6 +144,28 @@ export default function ProjectsSection() {
               </Grid>
             ))}
           </Grid>
+        ) : isMobile ? (
+          <Box
+            sx={{
+              display: "flex",
+              overflowX: "auto",
+              gap: 2,
+              scrollSnapType: "x mandatory",
+              px: 1,
+            }}
+          >
+            {projects.map((project) => (
+              <Box
+                key={project.id}
+                sx={{
+                  flex: "0 0 85%",
+                  scrollSnapAlign: "start",
+                }}
+              >
+                <ProjectCard project={project} compact />
+              </Box>
+            ))}
+          </Box>
         ) : (
           <Grid container spacing={4} columns={2}>
             {projects.map((project) => (

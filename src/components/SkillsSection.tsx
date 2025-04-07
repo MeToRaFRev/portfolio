@@ -235,16 +235,29 @@ function SkillIcon({ skill, index }: SkillIconProps): JSX.Element {
         }}
       >
         <Box
+          onClick={handleIconHover}
           onMouseEnter={handleIconHover}
           onMouseLeave={handleIconHover}
           sx={{
+            width:{xl:'none',lg:'100px',md:'90px',sm:'70px',xs:'60px'},
+            height:{xl:'none',lg:'125px',md:'115px',sm:'95px',xs:'85px'},
+            // scale: {
+            //   xl: 1,
+            //   lg: 0.9,
+            //   md: 0.8,
+            //   sm: 0.7,
+            //   xs: 0.6,
+            // },
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
           }}
         >
-          <Box sx={{ width: 64, height: 64, mb: 2 }}>
+          <Box sx={{ 
+            width: {xl:'none',lg:'70px',md:'70px',sm:'60px',xs:'40px'},
+             height: {xl:'none',lg:'70px',md:'70px',sm:'60px',xs:'40px'},
+              mb: 2 }}>
             <img
               src={skill.icon}
               alt={skill.name}
@@ -255,7 +268,7 @@ function SkillIcon({ skill, index }: SkillIconProps): JSX.Element {
               }}
             />
           </Box>
-          <Typography sx={{ color: "text.secondary", fontWeight: 500 }}>
+          <Typography noWrap sx={{ color: "text.secondary", fontWeight: 500 }}>
             {skill.name}
           </Typography>
         </Box>
@@ -279,7 +292,7 @@ export default function SkillsSection() {
       component="section"
       sx={{
         py: 10,
-        px: 2,
+        px: 2,        
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -287,7 +300,7 @@ export default function SkillsSection() {
     >
       <Box
         sx={{
-          width: "50%",
+          minWidth:{xl:'none',lg:'50%',md:'50%',sm:'50%',xs:'50%'},
           border: "1px solid",
           borderColor: "divider",
           borderRadius: 2,
@@ -325,7 +338,15 @@ export default function SkillsSection() {
               marginBottom: "2rem",
             }}
           >
+            <Typography
+            noWrap
+             sx={{
+              fontSize: { xl:"2rem", lg: "1.5rem", md: "1.3rem", sm: "1.3rem", xs: "1.2rem" },
+              fontWeight: "bold",
+              color: "text.primary",
+            }}>
             Technologies I Work With
+            </Typography>
           </motion.div>
 
           <Grid container spacing={4} justifyContent="center" key={refreshKey}>

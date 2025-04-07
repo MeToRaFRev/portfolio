@@ -7,6 +7,7 @@ import { ReactComponent as Linkedin } from "../assets/icons/linkedin.svg";
 import { ReactComponent as Github } from "../assets/icons/github.svg";
 import scroll from "../utils/scroll";
 import avielImage from "../assets/images/aviel.png";
+import { useWindowHeight } from "../hooks/useWindowSize";
 
 // Create motion-enabled versions of MUI components
 const MotionBox = motion.create(Box);
@@ -14,6 +15,7 @@ const MotionBox = motion.create(Box);
 export default function HeroSection() {
   const arrowControls = useAnimation();
   const [arrowExpanded, setArrowExpanded] = useState(false);
+  const windowHeight = useWindowHeight();
   useEffect(() => {
     if (!arrowExpanded) {
       arrowControls.start({
@@ -32,16 +34,23 @@ export default function HeroSection() {
   const handleArrowClick = async () => {
     // Disable custom scroll while we perform our animation
     arrowControls.stop();
+    // Calculate how much vertical space is left below the arrow
+    const arrowElement = document.getElementById("hero-arrow");
+    const arrowRect = arrowElement?.getBoundingClientRect();
+    const maxAvailableOffset =
+      window.innerHeight - (arrowRect?.bottom ?? 0) - 40;
+
+    // Use the minimum between 35vh and available space
+    const yOffset = Math.min(window.innerHeight * 0.35, maxAvailableOffset);
 
     if (!arrowExpanded) {
       // First click: animate arrow down and rotate it
       setTimeout(async () => {
         await scroll(window.innerHeight - 75, 1000);
-      }
-      , 600); // Adjust the delay as needed
+      }, 600); // Adjust the delay as needed
 
       await arrowControls.start({
-        y: "35vh", // adjust as needed
+        y: yOffset,
         transition: { duration: 1 },
       });
       // Programmatically scroll down (adjust target as needed)
@@ -89,6 +98,7 @@ export default function HeroSection() {
         justifyContent: "center",
         alignItems: "center",
         position: "relative",
+        overflow: "visible",
         px: 2,
       }}
     >
@@ -111,36 +121,38 @@ export default function HeroSection() {
             backdropFilter: "none",
           }}
         />
-        <Box sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 2,
-        }}>
-        <Typography
-          component="h1"
+        <Box
           sx={{
-            fontSize: { xs: "2.25rem", md: "3.75rem" },
-            fontWeight: "bold",
-            color: "text.primary",
-            mb: 3,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 2,
           }}
         >
-          Hello, I'm
-        </Typography>
-        <Typography
-          component="h1"
-          sx={{
-            fontSize: { xs: "2.25rem", md: "3.75rem" },
-            fontWeight: "bold",
-            color: "primary.main",
-            // stroke: "white",
-            // strokeWidth: 1,
-            mb: 3,
-          }}
-        >
-          Aviel Levy
-        </Typography>
+          <Typography
+            component="h1"
+            sx={{
+              fontSize: { xs: "2.25rem", md: "3.75rem" },
+              fontWeight: "bold",
+              color: "text.primary",
+              mb: 3,
+            }}
+          >
+            Hello, I'm
+          </Typography>
+          <Typography
+            component="h1"
+            sx={{
+              fontSize: { xs: "2.25rem", md: "3.75rem" },
+              fontWeight: "bold",
+              color: "primary.main",
+              // stroke: "white",
+              // strokeWidth: 1,
+              mb: 3,
+            }}
+          >
+            Aviel Levy
+          </Typography>
         </Box>
         <Typography
           component="p"
@@ -196,15 +208,16 @@ export default function HeroSection() {
 
       <MotionBox
         sx={{
-          position: "absolute",
-          bottom: { lg: "30vh" },
           cursor: "pointer",
+          display: "flex",
+          justifyContent: "center",
         }}
         animate={arrowControls}
         onClick={handleArrowClick}
       >
         <ArrowDown width={24} height={24} color="#9CA3AF" />
       </MotionBox>
+      {windowHeight !== null && windowHeight <= 900 && <Box sx={{ height: 80 }} />}
     </MotionBox>
   );
 }

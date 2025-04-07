@@ -12,9 +12,10 @@ import { Project } from "../types/Project";
 
 interface ProjectCardProps {
   project: Project;
+  compact?: boolean;
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project,compact }: ProjectCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <motion.div
@@ -97,62 +98,67 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             </Box>
           </motion.div>
 
-          <CardContent sx={{ p: 3 }}>
-            <Typography variant="h5" component="h3" gutterBottom>
+          <CardContent sx={{ p: compact ? 2 : 3 }}>
+            <Typography
+              variant={compact ? "h6" : "h5"}
+              component="h3"
+              gutterBottom
+            >
               {project.title}
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              {project.description}
-            </Typography>
 
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
-              {project.technologies.map((tech) => (
+            {!compact && (
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                {project.description}
+              </Typography>
+            )}
+
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 1,
+                mb: compact ? 1 : 2,
+              }}
+            >
+              {(compact
+                ? project.technologies.slice(0, 2)
+                : project.technologies
+              ).map((tech) => (
                 <Chip
                   key={tech}
                   label={tech}
-                  variant="filled"
                   size="small"
-                  sx={{
-                    // backgroundColor: "#2e2e2e0c", color:"#000000", "&:hover": { backgroundColor: "#2e2e2e18"},
-                    textTransform: "none",
-                  }}
+                  sx={{ fontSize: compact ? "0.7rem" : undefined }}
                 />
               ))}
             </Box>
 
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: "flex", gap: 1 }}>
               <Button
                 variant="text"
+                size={compact ? "small" : "medium"}
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
                   gap: 1,
-                  // borderColor:"#2e2e2e57",color:"#000000", "&:hover": { backgroundColor: "#2e2e2e18"},
                   textTransform: "none",
                 }}
                 onClick={() => window.open(project.preview_url, "_blank")}
               >
-                <ExternalLink size={16} />
-                Preview
+                <ExternalLink size={14} />
+                Live
               </Button>
+
               {project.github_url && (
                 <Button
                   variant="text"
+                  size={compact ? "small" : "medium"}
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
                     gap: 1,
-                    // borderColor:"#2e2e2e57",color:"#000000", "&:hover": { backgroundColor: "#2e2e2e18"},
                     textTransform: "none",
                   }}
                   onClick={() => window.open(project.github_url, "_blank")}
                 >
-                  <Github
-                    width={16}
-                    height={16}
-                    color="currentColor"
-                    style={{ marginBottom: 2 }}
-                  />
+                  <Github width={14} height={14} />
                   Code
                 </Button>
               )}
